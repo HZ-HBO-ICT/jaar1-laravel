@@ -10,6 +10,7 @@
 
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
+    <p>You can find the source for his project on <a href="https://github.com/HZICT/jaar1-laravel"><i class="fa fa-github"></i>&nbsp Github</a> </p>
 @stop
 
 @push('css')
