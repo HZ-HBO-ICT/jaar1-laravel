@@ -47,3 +47,5 @@ local.properties
 .buildpath
 *.launch
 
+## Custom bat files
+*.bat

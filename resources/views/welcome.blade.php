@@ -2,10 +2,10 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Welcome')
+@section('title', __('messages.home'))
 
-@section('content_header')
-    <h1>Welcome</h1>
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('home') }}
 @stop
 
 @section('content')
