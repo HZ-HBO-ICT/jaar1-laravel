@@ -21,6 +21,9 @@
                 <tbody><tr>
                     <th style="width: 10px">#</th>
                     <th>@lang('messages.task.title')</th>
+                    <th>@lang('messages.task.rating')</th>
+                    <th>@lang('messages.task.hours_planned')</th>
+                    <th>@lang('messages.task.hours_remaining')</th>
                     <th>@lang('messages.task.progress')</th>
                     <th><span class="pull-right">@lang('messages.task.options')</span></th>
                 </tr>
@@ -29,9 +32,31 @@
                         <td>{{ $task->id }}</td>
                         <td><a href="{{ route('tasks.show', ['task' => $task]) }}">{{ $task->title }}</a></td>
                         <td>
-                            <div class="progress progress-xs">
-                                <div class="progress-bar progress-bar-primary" style="width: {{ $task->progress }}%"></div>
-                            </div>
+                            @for($i=1; $i<=$task->rating; $i++)
+                                <i class="fa fa-star text-yellow"></i>
+                            @endfor
+                        </td>
+                        <td>{{ $task->hours_planned }}</td>
+                        <td>{{ $task->hours_remaining }}</td>
+                        <td>
+                            @switch($task->state)
+                                @case(0)
+                                    <span class="label bg-gray">@lang('messages.task.state.todo')</span>
+                                @break
+                                @case(1)
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-primary" style="width: {{ $task->progress }}%">
+                                            {{ round($task->progress) }}%
+                                        </div>
+                                    </div>
+                                @break
+                                @case(2)
+                                    <span class="label bg-red text-uppercase">@lang('messages.task.state.onhold')</span>
+                                @break
+                                @case(3)
+                                    <span class="label bg-green">@lang('messages.task.state.done')</span>
+                                @break
+                            @endswitch
                         </td>
                         <td>
                             <div class="btn-group pull-right">
@@ -46,30 +71,31 @@
                         </td>
                     </tr>
                 @endforeach
-                </tbody></table>
-        </div>
-        <!-- /.box-body -->
-        <div class="modal modal-danger fade" id="modal-delete">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title"><i class="fa fa-trash-o"></i>&nbsp @lang('messages.tasks_delete')</h4>
+                </tbody>
+            </table>
+            <div class="modal modal-danger fade" id="modal-delete">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title"><i class="fa fa-trash-o"></i>&nbsp @lang('messages.tasks_delete')</h4>
+                        </div>
+                        {{ Form::open([ 'route' => ['tasks.destroy', 0 ], 'method' => 'DELETE']) }}
+                        <div class="modal-body">
+                            <p>One fine body…</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">@lang('messages.cancel')</button>
+                            <button type="submit" class="btn btn-outline">@lang('messages.delete')</button>
+                        </div>
+                        {{ Form::close() }}
                     </div>
-                    {{ Form::open([ 'route' => ['tasks.destroy', 0 ], 'method' => 'DELETE']) }}
-                    <div class="modal-body">
-                        <p>One fine body…</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">@lang('messages.cancel')</button>
-                        <button type="submit" class="btn btn-outline">@lang('messages.delete')</button>
-                    </div>
-                    {{ Form::close() }}
+                    <!-- /.modal-content -->
                 </div>
-                <!-- /.modal-content -->
+                <!-- /.modal-dialog -->
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.box-body -->
         </div>
     </div>
 @stop

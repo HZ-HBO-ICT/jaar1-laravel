@@ -12,6 +12,9 @@ $factory->define(\App\Task::class, function (Faker $faker) {
     return [
         'title' => $faker->sentence,
         'body' => $body,
+        'state' => $faker->numberBetween(0, 3),
+        'rating' => $faker->numberBetween(0, 5),
+        'hours_planned' => $faker->numberBetween(2, 4),
         'progress' => $faker->numberBetween(0, 100),
     ];
 });

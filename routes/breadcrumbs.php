@@ -25,7 +25,7 @@ Breadcrumbs::register('tasks.create', function ($breadcrumbs) {
 // Home > Tasks > [Task]
 Breadcrumbs::register('task', function ($breadcrumbs, $task) {
     $breadcrumbs->parent('tasks');
-    $breadcrumbs->push($task->title, route('tasks.show', $task));
+    $breadcrumbs->push(str_limit($task->title, $limit = 50, $end = '...'), route('tasks.show', $task));
 });
 
 // Home > Tasks > [Task] > Edit

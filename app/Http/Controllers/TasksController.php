@@ -14,7 +14,8 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        //$tasks = Task::all();
+        $tasks = Task::whereNull('parent_id')->get();
 
         return view("tasks.index", compact('tasks'));
     }
@@ -22,29 +23,39 @@ class TasksController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Task $task)
     {
-        return view("tasks.create");
+        return view("tasks.create", compact('task'));
     }
+
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Task $task
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Task $task)
     {
         $request->validate([
             'title' => 'required|min:6',
+            'hours_planned' => 'numeric|min:0',
             'body' => 'max:255',
+            'state' => 'numeric|min:0|max:3'
         ]);
 
-        $task = Task::create($request->all());
-
-        return redirect()->route('tasks.index')->with('success', "$task->title is toegevoegd.");
+        if ( $task )
+        {
+            $newTask = $task->children()->create($request->all());
+            return redirect()->route('tasks.show', ['task' => $task])->with('success', "$newTask->title is toegevoegd.");
+        } else {
+            $newTask = Task::create($request->all());
+            return redirect()->route('tasks.index')->with('success', "$newTask->title is toegevoegd.");
+        }
     }
 
     /**
@@ -80,10 +91,17 @@ class TasksController extends Controller
     {
         $request->validate([
             'title' => 'max:255',
+            'state' => 'numeric|min:0|max:3',
             'progress' => 'numeric|min:0|max:100',
+            'rating' => 'numeric|min:0|max:5',
         ]);
 
         $task->title = $request->title;
+
+//            dd($task);
+        if (isset($request->state)) { // if user removed all data from progress input, field is not sent in request
+            $task->state = $request->state;
+        }
 
         if (isset($request->body)) { // if user removed all data from progress input, field is not sent in request
             $task->body = $request->body;
@@ -97,7 +115,17 @@ class TasksController extends Controller
             $task->progress = 0;
         }
 
+        if (isset($request->rating)) { // if user removed all data from progress input, field is not sent in request
+            $task->rating = $request->rating;
+        }
+
         $task->save();
+
+        $url = $request->previous_url;
+
+        if ($url) {
+            return redirect()->to($url)->with('success', "$task->title is aangepast.");
+        }
 
         return redirect()->route('tasks.index')->with('success', "$task->title is aangepast.");
     }

@@ -13,12 +13,20 @@
         <div class="box-header with-border">
             <h3 class="box-title">@lang('messages.tasks_create')</h3>
         </div>
-        <form action="{{ route("tasks.store") }}" method="POST" accept-charset="UTF-8">
+        @if($task)
+            <form action="{{ route("tasks.store_child", ['task' => $task]) }}" method="POST" accept-charset="UTF-8">
+        @else
+            <form action="{{ route("tasks.store") }}" method="POST" accept-charset="UTF-8">
+        @endif
             {{ csrf_field() }}
             <div class="box-body">
                 <div class="form-group">
                     <label for="title">@lang('messages.task.title')</label>
                     <input type="text" class="form-control" name="title" id="title" placeholder="Enter text">
+                </div>
+                <div class="form-group">
+                    <label for="hours_planned">@lang('messages.task.hours_planned')</label>
+                    <input type="text" class="form-control" name="hours_planned" id="hours_planned" placeholder="Enter a number">
                 </div>
                 <div class="form-group">
                     <label for="body" class="control-label">@lang('messages.task.body')</label>
@@ -30,6 +38,7 @@
             <div class="box-footer">
                 <div class="box-footer">
                     <button type="submit" class="btn btn-primary">@lang('messages.submit')</button>
+                    <a href="{{ url()->previous() }}" class="btn btn-default">@lang('messages.cancel')</a>
                 </div>
             </div>
         </form>

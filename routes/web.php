@@ -15,8 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('tasks/{task}/create', 'TasksController@create')->name('tasks.create_child');
+Route::post('tasks/{task}', 'TasksController@store')->name('tasks.store_child');
 Route::resources([
     'tasks' => 'TasksController',
-    'furbs' => 'FurbsController',
-    'cheeses' => 'CheeseController',
 ]);
