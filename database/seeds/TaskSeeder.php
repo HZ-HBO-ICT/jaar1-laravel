@@ -25,12 +25,10 @@ class TaskSeeder extends Seeder
 
         // Make some of the tasks subtask of some other task.
         // do this only if we have a sensible amount of tasks
-        if (Task::all()->count() > 2 ) {
-            foreach (Task::where('id', '>', '3')->get() as $task) {
-                    $this->command->info("Finding parent for " . $task->id);
-                    $parent = $this->getParentFromRoots();
-                    $parent->children()->save($task);
-            }
+        foreach (Task::where('id', '>', '3')->get() as $task) {
+                $this->command->info("Finding parent for " . $task->id);
+                $parent = $this->getParentFromRoots();
+                $parent->children()->save($task);
         }
     }
 
