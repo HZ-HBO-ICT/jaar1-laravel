@@ -21,7 +21,7 @@ class TaskSeeder extends Seeder
         factory(Task::class)->create([
             'title' => 'Clean the house'
         ]);
-        factory(Task::class, 197)->create();
+        factory(Task::class, 97)->create();
 
         // Make some of the tasks subtask of some other task.
         // do this only if we have a sensible amount of tasks

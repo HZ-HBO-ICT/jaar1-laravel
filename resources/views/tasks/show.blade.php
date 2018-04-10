@@ -11,7 +11,12 @@
 @section('content')
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">@lang('messages.tasks_show')</h3>
+            <h3 class="box-title">
+                {{ $task->title }}
+                @for($i=1; $i<=$task->rating; $i++)
+                    <i class="fa fa-star text-yellow"></i>
+                @endfor
+            </h3>
             <div class="btn-group pull-right">
                 <a type="button"
                    href="{{ $task->parent ? route('tasks.show', ['task' => $task->parent]) : route('tasks.index') }}"
@@ -28,12 +33,7 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <h2>
-                {{ $task->title }}
-                @for($i=1; $i<=$task->rating; $i++)
-                    <i class="fa fa-star text-yellow"></i>
-                @endfor
-                <span class="pull-right">
+                <span>
                 @switch($task->state)
                         @case(0)
                         <span class="label bg-gray">@lang('messages.task.state.todo')</span>
@@ -49,7 +49,6 @@
                         @break
                     @endswitch
                 </span>
-            </h2>
             <label for="progress">@lang('messages.task.progress')&nbsp{{ $task->hours_actual }}/{{ $task->hours_planned }}</label>
             <div class="progress progress-xs">
                 <div class="progress-bar progress-bar-primary" style="width: {{ $task->progress }}%"></div>
